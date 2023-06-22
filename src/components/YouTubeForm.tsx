@@ -1,6 +1,12 @@
 import React, { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
+import Input from "@mui/material/Input";
+import TextField from "@mui/material/TextField";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 
 let renderCount = 0;
 
@@ -20,7 +26,7 @@ type FormValues = {
 
 const YouTubeForm = () => {
   const form = useForm<FormValues>();
-  const { register, control, handleSubmit, formState } = form;
+  const { control, handleSubmit, formState } = form;
   const { errors } = formState;
 
   const onSubmit = (data: FormValues) => {
@@ -38,77 +44,113 @@ const YouTubeForm = () => {
       <h1>YouTube Form ({renderCount / 2})</h1>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <div className="form-control">
-          <label htmlFor="username">Username</label>
-          <input
-            type="text"
-            id="username"
-            {...register("username", {
+          <Controller
+            name="username"
+            control={control}
+            rules={{
               required: {
                 value: true,
                 message: "Username is required",
               },
-            })}
+            }}
+            render={({ field }) => (
+              <TextField
+                id="username"
+                label="Outlined"
+                variant="outlined"
+                name={field.name}
+                value={field.value}
+                onChange={field.onChange}
+              />
+            )}
           />
           <p className="error">{errors.username?.message}</p>
         </div>
 
         <div className="form-control">
-          <label htmlFor="email">Email</label>
-          <input
-            type="text"
-            id="email"
-            {...register("email", {
+          <Controller
+            name="email"
+            control={control}
+            rules={{
               pattern: {
                 value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                 message: "Invalid email address",
               },
-              validate: {
-                notAdmin: (fieldValue) => {
-                  return fieldValue !== "admin@example.com" || "Nice try!";
-                },
-              },
-            })}
+            }}
+            render={({ field }) => (
+              <Input
+                {...field}
+                type="text"
+                id="username"
+                error={!!errors.username}
+                name={field.name}
+                value={field.value}
+                onChange={field.onChange}
+              />
+            )}
           />
           <p className="error">{errors.email?.message}</p>
         </div>
 
         <div className="form-control">
-          <label htmlFor="channel">Channel</label>
-          <input
-            type="text"
-            id="channel"
-            {...register("channel", {
+          <Controller
+            name="channel"
+            control={control}
+            rules={{
               required: {
                 value: true,
                 message: "Channel is required",
               },
-            })}
+            }}
+            render={({ field }) => (
+              <Input
+                {...field}
+                type="text"
+                id="channel"
+                error={!!errors.channel}
+                name={field.name}
+                value={field.value}
+                onChange={field.onChange}
+              />
+            )}
           />
           <p className="error">{errors.channel?.message}</p>
         </div>
 
         <div className="form-control">
-          <label htmlFor="country">Country</label>
-          <select
-            id="country"
-            {...register("country", {
+          <Controller
+            name="country"
+            control={control}
+            rules={{
               required: {
                 value: true,
                 message: "Country is required",
               },
-            })}
-          >
-            <option value="">Select a country</option>
-            {countries.map((country) => (
-              <option key={country.value} value={country.value}>
-                {country.label}
-              </option>
-            ))}
-          </select>
-          <p className="error">{errors.channel?.message}</p>
+            }}
+            render={({ field }) => (
+              <FormControl fullWidth>
+                <InputLabel id="country-label">Country</InputLabel>
+                <Select
+                  labelId="country-label"
+                  id="country"
+                  value={field.value}
+                  label="Age"
+                  onChange={field.onChange}
+                >
+                  {countries.map((country) => (
+                    <MenuItem key={country.value} value={country.value}>
+                      {country.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
+          />
+          <p className="error">{errors.country?.message}</p>
         </div>
         <button>Submit</button>
       </form>
+      {JSON.stringify(errors)}
       <DevTool control={control} />
     </div>
   );
