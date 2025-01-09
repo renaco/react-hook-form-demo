@@ -1,8 +1,7 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import Input from "@mui/material/Input";
-import TextField from "@mui/material/TextField";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -10,7 +9,7 @@ import Select from "@mui/material/Select";
 
 let renderCount = 0;
 
-let countries = [
+const countries = [
   { label: "Bangladesh", value: "Bangladesh" },
   { label: "India", value: "India" },
   { label: "China", value: "China" },
@@ -54,10 +53,10 @@ const YouTubeForm = () => {
               },
             }}
             render={({ field }) => (
-              <TextField
+              <Input
+                {...field}
                 id="username"
-                label="Outlined"
-                variant="outlined"
+                error={!!errors.username}
                 name={field.name}
                 value={field.value}
                 onChange={field.onChange}
@@ -82,7 +81,7 @@ const YouTubeForm = () => {
                 {...field}
                 type="text"
                 id="username"
-                error={!!errors.username}
+                error={!!errors.email}
                 name={field.name}
                 value={field.value}
                 onChange={field.onChange}
